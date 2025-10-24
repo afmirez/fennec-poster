@@ -5,11 +5,11 @@
 #  • All values are strings, except 'Order' (integer).
 #  • 'Tags' must be a list of valid string tags.
 
-Title: "sdsd"
-Description: "sdsd"
+Title: "This is a title"
+Description: "This is a description"
 Category: js
-Tags: ["Python"]
-Order: 2
+Tags: ["JavaScript"]
+Order: 1
 ---
 
 This is for testingg 2
