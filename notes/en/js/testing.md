@@ -5,11 +5,11 @@
 #  • All values are strings, except 'Order' (integer).
 #  • 'Tags' must be a list of valid string tags.
 
-Title: ''
-Description: ''
+Title: "This is a file"
+Description: "This is a descriptor"
 Category: js
-Tags: []
-Order: null
+Tags: ["JavaScript"]
+Order: 1
 ---
 
 This is for testing

@@ -1,0 +1,14 @@
+default_language_version:
+  python: python3
+
+repos:
+  - repo: local
+    hooks:
+      - id: validate-frontmatter
+        name: Validate and enrich frontmatter in Markdown notes
+        entry: python -m scripts.frontmatter_validator
+        language: python
+        files: ^notes/.*\.md$
+        stages: [pre-commit]
+        additional_dependencies:
+          - pyyaml==6.0.3
