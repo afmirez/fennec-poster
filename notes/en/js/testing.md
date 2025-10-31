@@ -5,8 +5,8 @@
 #  • All values are strings, except 'Order' (integer).
 #  • 'Tags' must be a list of valid string tags.
 
-Title: "asd"
-Description: "sad"
+Title: "ss"
+Description: "ss"
 Category: js
 Tags: ["Python"]
 Order: 1
