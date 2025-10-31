@@ -3,9 +3,8 @@ repos:
     hooks:
       - id: validate-frontmatter
         name: Validate frontmatter
-        entry: scripts/pre_commit_frontmatter/entrypoint.py
+        entry: python3 scripts/pre_commit_frontmatter/validate.py
         files: ^notes/.*\.md$
-        language: python
+        language: system
         stages: [pre-commit]
-        additional_dependencies:
-          - pyyaml==6.0.3
+        additional_dependencies: []
