@@ -1,39 +1,35 @@
-import re
 import sys
-from dataclasses import asdict
 from pathlib import Path
-from typing import Any
-
 import yaml
+from typing import Any
+import re
+import markdown
+from dataclasses import asdict
+import json
 
-from scripts.shared.constants import (
-    FrontmatterField,
+from scripts.shared.models import (
     FRONTMATTER_BANNER,
     FRONTMATTER_DELIMITER,
+    Frontmatter,
+    FrontmatterField,
+    FrontmatterValidationError,
+    ValidationResult,
     VALID_FRONTMATTER_FIELDS,
     VALID_TAGS,
 )
 
-from scripts.shared.models import (
-    Frontmatter,
-    ValidationResult,
-)
+def _is_frontmatter_present(file_data: str) -> dict[str, Any] | None:
+    """Parse and return the YAML frontmatter if present; return None otherwise."""
+    frontmatter_match = re.search(r"^---\s*\n(.*?)\n---", file_data, re.DOTALL)
+    if not frontmatter_match:
+        return None
+    return yaml.safe_load(frontmatter_match.group(1))
 
-from scripts.shared.errors import FrontmatterValidationError
 
 
-def _insert_frontmatter(path: Path) -> None:
-    """Prepend delimiter + banner + frontmatter if missing. """
-    existing_content = path.read_text(encoding="utf-8")
-    frontmatter_dicc = asdict(Frontmatter(Category=path.parent.name))
-    frontmatter_yaml = yaml.safe_dump(frontmatter_dicc, sort_keys=False, default_flow_style=False)
-    frontmatter_block = (
-        f"{FRONTMATTER_DELIMITER}"
-        f"{FRONTMATTER_BANNER}"
-        f"{frontmatter_yaml}"
-        f"{FRONTMATTER_DELIMITER}\n"
-    )
-    path.write_text(frontmatter_block + existing_content, encoding="utf-8", newline="\n")
+
+
+
 
 def _check_frontmatter_validity(frontmatter : dict[str, Any]) -> ValidationResult:
     errors : list[str] = []
@@ -61,23 +57,14 @@ def _check_frontmatter_validity(frontmatter : dict[str, Any]) -> ValidationResul
 
     return ValidationResult(ok = not errors, errors = errors)
 
-def _is_frontmatter_present(file_data: str) -> dict[str, Any] | None:
-    """Parse and return the YAML frontmatter if present; return None otherwise."""
-    frontmatter_match = re.search(r"^---\s*\n(.*?)\n---", file_data, re.DOTALL)
-    if not frontmatter_match:
-        return None
-    return yaml.safe_load(frontmatter_match.group(1))
-
-def check_and_insert_frontmatter(file_paths: list[Path]) -> None:
+def validate_process_data(file_paths: list[Path]) -> None:
     """
-        Validates existing frontmatter and inserts new ones if missing.
-        Stops on first invalid file; only inserts after all pass validation.
-        Exits with code 1 so pre-commit prompts the user to complete them.
     """
     try:
-        pending_insertion = set() 
+        # Phase 1: Validate all files before creating objects
+        ft_title_object : dict[str, Frontmatter] = {}
+        ft_title_content : dict[str, str] = {}
 
-        # Phase 1: Validate all files before making any changes
         for path in file_paths:
             file_content = path.read_text(encoding="utf-8")
             frontmatter_dict = _is_frontmatter_present(file_content)
@@ -88,14 +75,45 @@ def check_and_insert_frontmatter(file_paths: list[Path]) -> None:
                     msg = "Invalid frontmatter:\n- " + "\n- ".join(f"{path}: {e}" for e in validation_result.errors)
                     raise FrontmatterValidationError([msg])
             else:
-                pending_insertion.add(path)
+                raise FrontmatterValidationError([f"File {path} Frontmatter not present. You will need to check what happened"])
+            
+            frontmatter = Frontmatter(**frontmatter_dict)
+            ft_title_object[frontmatter.Title] = frontmatter
 
-        # Phase 2: Only reached if all files passed validation
-        if pending_insertion:
-            for file in pending_insertion:
-                _insert_frontmatter(file)
-                print(f"[frontmatter] Please fill the new frontmatter for: {file}")
-            sys.exit(1)
+
+            # Phase 2 get parsed html:
+            parts = re.split(r"^---\s*\n.*?\n---\s*\n?", file_content, maxsplit=1, flags=re.DOTALL)
+            content_after = parts[1] if len(parts) > 1 else file_content
+
+            html = markdown.markdown(content_after)
+
+
+            ft_title_content[frontmatter.Title] = html
+
+
+
+
+        
+        # Phase 3: return the data we need for the gha actionm which is json data
+
+        dataToReturn = []
+
+        for el, fmt in ft_title_object.items():
+            new_dic = {
+                "frontmatter" : asdict(fmt)
+            }
+            new_dic["html"] = ft_title_content[el]
+            dataToReturn.append(new_dic)
+
+        json_str = json.dumps(dataToReturn, indent=4)
+
+        print(json_str)
+
+        
+
+
+            
+
 
     except FileNotFoundError as e:
         raise FileNotFoundError(f"Could not open file: {path}") from e
@@ -103,7 +121,11 @@ def check_and_insert_frontmatter(file_paths: list[Path]) -> None:
 def main():
     raw_file_paths = sys.argv[1:]
     absolute_paths = [Path(path).resolve() for path in raw_file_paths]
-    check_and_insert_frontmatter(absolute_paths)
+    validate_process_data(absolute_paths)
 
 if __name__ == "__main__":
     main()
+
+# A este punto el script VALIDA y imprimw JSON data
+# Pendiente de refactor de shared y mejora general total
+# Pendiente "REGRESAR REALMENTE" Json
