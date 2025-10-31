@@ -15,7 +15,7 @@ def is_frontmatter_present(file_data: str) -> dict[str, Any] | None:
         return None
     return yaml.safe_load(frontmatter_match.group(1))
 
-def _check_frontmatter_validity(frontmatter : dict[str, Any]) -> ValidationResult:
+def check_frontmatter_validity(frontmatter : dict[str, Any]) -> ValidationResult:
     errors : list[str] = []
 
     invalid_keys = set(frontmatter) - set(VALID_FRONTMATTER_FIELDS)
@@ -53,27 +53,3 @@ def insert_frontmatter(path: Path) -> None:
         f"{FRONTMATTER_DELIMITER}\n"
     )
     path.write_text(frontmatter_block + existing_content, encoding="utf-8", newline="\n")
-
-def check_frontmatter_validity(frontmatter : dict[str, Any]) -> ValidationResult:
-    errors : list[str] = []
-
-    invalid_keys = set(frontmatter) - set(VALID_FRONTMATTER_FIELDS)
-    missing_keys = set(VALID_FRONTMATTER_FIELDS) - set(frontmatter)
-    for key in sorted(invalid_keys):
-        errors.append(f"Unexpected key: {key}")
-    for key in sorted(missing_keys):
-        errors.append(f"Missing required key: {key}")
-    
-    for key, value in frontmatter.items():
-        match key:
-            case ( FrontmatterField.TITLE.value | FrontmatterField.DESCRIPTION.value | FrontmatterField.CATEGORY.value):
-                if not(isinstance(value, str) and value):
-                    errors.append(f"'{key}' must be a non-empty string")
-            case FrontmatterField.TAGS.value:
-                if not (isinstance(value, list) 
-                        and len(value) > 0 
-                        and all(isinstance(e, str) and e in VALID_TAGS for e in value)):
-                    errors.append(f"'{key}' must be a list of valid tags ({', '.join(sorted(VALID_TAGS))})")
-            case FrontmatterField.ORDER.value:
-                if not (isinstance(value, int) and value > 0):
-                    errors.append(f"'{key}' must be a positive integer")
