@@ -5,8 +5,8 @@
 #  • All values are strings, except 'Order' (integer).
 #  • 'Tags' must be a list of valid string tags.
 
-Title: "This is a title"
-Description: "This is a description"
+Title: "This is a new title"
+Description: "This is a new description"
 Category: js
 Tags: ["JavaScript"]
 Order: 1
