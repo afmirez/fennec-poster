@@ -6,7 +6,7 @@ from typing import Any
 
 import yaml
 
-from scripts.frontmatter_model import (
+from scripts.shared.models import (
     FRONTMATTER_BANNER,
     FRONTMATTER_DELIMITER,
     Frontmatter,
