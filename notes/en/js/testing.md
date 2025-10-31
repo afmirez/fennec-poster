@@ -5,11 +5,11 @@
 #  • All values are strings, except 'Order' (integer).
 #  • 'Tags' must be a list of valid string tags.
 
-Title: "This is a title"
-Description: "This is a description"
-Category: js
-Tags: ["JavaScript"]
-Order: 1
+title: "titlee"
+description: "description"
+category: js
+tags: ["JavaScript"]
+order: 1
 ---
 
 JavaScript makes objects central: almost all data is either an object or accessed through objects.

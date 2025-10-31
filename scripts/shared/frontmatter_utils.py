@@ -44,7 +44,7 @@ def check_frontmatter_validity(frontmatter : dict[str, Any]) -> ValidationResult
 def insert_frontmatter(path: Path) -> None:
     """Prepend delimiter + banner + frontmatter if missing. """
     existing_content = path.read_text(encoding="utf-8")
-    frontmatter_dicc = asdict(Frontmatter(Category=path.parent.name))
+    frontmatter_dicc = asdict(Frontmatter(category=path.parent.name))
     frontmatter_yaml = yaml.safe_dump(frontmatter_dicc, sort_keys=False, default_flow_style=False)
     frontmatter_block = (
         f"{FRONTMATTER_DELIMITER}"

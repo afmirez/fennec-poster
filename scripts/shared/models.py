@@ -4,11 +4,11 @@ from scripts.shared.constants import ValidTags
 
 @dataclass(slots=True)
 class Frontmatter:
-    Title: str = ""
-    Description: str = ""
-    Category: str = ""
-    Tags: list[ValidTags] = field(default_factory=list)
-    Order: Optional[int] = None
+    title: str = ""
+    description: str = ""
+    category: str = ""
+    tags: list[ValidTags] = field(default_factory=list)
+    order: Optional[int] = None
 
 @dataclass(slots=True)
 class ValidationResult:

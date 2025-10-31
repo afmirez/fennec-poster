@@ -18,11 +18,12 @@ FRONTMATTER_DELIMITER = "---\n"
 
 # Enums
 class FrontmatterField(Enum):
-    TITLE = "Title"
-    DESCRIPTION = "Description"
-    ORDER = "Order"
-    TAGS = "Tags"
-    CATEGORY = "Category" # Field auto-filled by the script
+    TITLE = "title"
+    DESCRIPTION = "description"
+    ORDER = "order"
+    TAGS = "tags"
+    CATEGORY = "category" # Field auto-filled by the script
+    
 class ValidTags(Enum):
     JS = "JavaScript"
     PYTHON = "Python"

@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 import re
 import markdown
-from dataclasses import asdict
+from dataclasses import asdict, dataclass
 import json
 
 from scripts.shared.models import (
@@ -16,6 +16,13 @@ from scripts.shared.frontmatter_utils import (
     is_frontmatter_present,
     check_frontmatter_validity,
 )
+
+@dataclass
+class GHABody:
+    frontmatter : Frontmatter
+    
+
+
 
 def validate_process_data(file_paths: list[Path]) -> None:
     """
