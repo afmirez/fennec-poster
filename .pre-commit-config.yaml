@@ -7,4 +7,3 @@ repos:
         files: ^notes/.*\.md$
         language: system
         stages: [pre-commit]
-        additional_dependencies: []
