@@ -7,7 +7,6 @@ Core definitions for frontmatter validation and structure.
 Includes constants, enums, dataclasses, and custom errors.
 """
 
-
 # Constants
 FRONTMATTER_BANNER = """\
 # FRONTMATTER INSTRUCTIONS:
