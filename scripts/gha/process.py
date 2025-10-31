@@ -1,61 +1,21 @@
 import sys
 from pathlib import Path
-import yaml
-from typing import Any
 import re
 import markdown
 from dataclasses import asdict
 import json
 
 from scripts.shared.models import (
-    FRONTMATTER_BANNER,
-    FRONTMATTER_DELIMITER,
     Frontmatter,
-    FrontmatterField,
-    FrontmatterValidationError,
     ValidationResult,
-    VALID_FRONTMATTER_FIELDS,
-    VALID_TAGS,
 )
 
-def _is_frontmatter_present(file_data: str) -> dict[str, Any] | None:
-    """Parse and return the YAML frontmatter if present; return None otherwise."""
-    frontmatter_match = re.search(r"^---\s*\n(.*?)\n---", file_data, re.DOTALL)
-    if not frontmatter_match:
-        return None
-    return yaml.safe_load(frontmatter_match.group(1))
+from scripts.shared.errors import FrontmatterValidationError
 
-
-
-
-
-
-
-def _check_frontmatter_validity(frontmatter : dict[str, Any]) -> ValidationResult:
-    errors : list[str] = []
-
-    invalid_keys = set(frontmatter) - set(VALID_FRONTMATTER_FIELDS)
-    missing_keys = set(VALID_FRONTMATTER_FIELDS) - set(frontmatter)
-    for key in sorted(invalid_keys):
-        errors.append(f"Unexpected key: {key}")
-    for key in sorted(missing_keys):
-        errors.append(f"Missing required key: {key}")
-    
-    for key, value in frontmatter.items():
-        match key:
-            case ( FrontmatterField.TITLE.value | FrontmatterField.DESCRIPTION.value | FrontmatterField.CATEGORY.value):
-                if not(isinstance(value, str) and value):
-                    errors.append(f"'{key}' must be a non-empty string")
-            case FrontmatterField.TAGS.value:
-                if not (isinstance(value, list) 
-                        and len(value) > 0 
-                        and all(isinstance(e, str) and e in VALID_TAGS for e in value)):
-                    errors.append(f"'{key}' must be a list of valid tags ({', '.join(sorted(VALID_TAGS))})")
-            case FrontmatterField.ORDER.value:
-                if not (isinstance(value, int) and value > 0):
-                    errors.append(f"'{key}' must be a positive integer")
-
-    return ValidationResult(ok = not errors, errors = errors)
+from scripts.shared.frontmatter_utils import (
+    is_frontmatter_present,
+    check_frontmatter_validity,
+)
 
 def validate_process_data(file_paths: list[Path]) -> None:
     """
@@ -67,10 +27,10 @@ def validate_process_data(file_paths: list[Path]) -> None:
 
         for path in file_paths:
             file_content = path.read_text(encoding="utf-8")
-            frontmatter_dict = _is_frontmatter_present(file_content)
+            frontmatter_dict = is_frontmatter_present(file_content)
 
             if frontmatter_dict:
-                validation_result: ValidationResult = _check_frontmatter_validity(frontmatter_dict)
+                validation_result: ValidationResult = check_frontmatter_validity(frontmatter_dict)
                 if not validation_result.ok:
                     msg = "Invalid frontmatter:\n- " + "\n- ".join(f"{path}: {e}" for e in validation_result.errors)
                     raise FrontmatterValidationError([msg])
