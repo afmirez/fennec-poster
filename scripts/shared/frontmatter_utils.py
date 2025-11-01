@@ -53,3 +53,7 @@ def insert_frontmatter(path: Path) -> None:
         f"{FRONTMATTER_DELIMITER}\n"
     )
     path.write_text(frontmatter_block + existing_content, encoding="utf-8", newline="\n")
+
+def get_content_after_frontmatter(file_data: str) -> str:
+    parts = re.split(r"^---\s*\n.*?\n---\s*\n?", file_data, maxsplit=1, flags=re.DOTALL)
+    return parts[1] if len(parts) > 1 else file_data

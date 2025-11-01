@@ -5,5 +5,7 @@ repos:
         name: Validate frontmatter
         entry: python3 -m scripts.pre_commit_frontmatter.validate
         files: ^notes/.*\.md$
-        language: system
+        language: python
         stages: [pre-commit]
+        additional_dependencies:
+          - pyyaml
