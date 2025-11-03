@@ -12,6 +12,7 @@ jobs:
         uses: actions/setup-python@v6
         with:
           python-version: "3.12.3"
+      - name: Installing dedepencies
         run: pip3 install -r scripts/gha/requirements.txt
       - name: Running Python Script
         run: |
