@@ -6,18 +6,36 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: Checkout repository (full history)
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - name: Setup Python
         uses: actions/setup-python@v6
         with:
           python-version: "3.12.3"
-      - name: Installing dedepencies
+
+      - name: Installing dependencies
         run: pip3 install -r scripts/gha/requirements.txt
-      - name: Running Python Script
+
+      - name: Run processor for changed files under notes/
+        shell: bash
+
         run: |
-          git fetch origin ${{ github.event.before }} --depth=1
-          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -i "^notes/")
-          if [[ -n "$changed_files" ]]; then
-            python3 -m scripts.gha.process $changed_files
+
+          #  Use HEAD parent in case of new branches
+          BEFORE="${{ github.event.before }}"
+          if [[ "$BEFORE" == "0000000000000000000000000000000000000000" ]]; then
+            BEFORE="$(git rev-parse HEAD^ 2>/dev/null || echo HEAD)"
+          fi
+
+          # We only care about files changed in /notes
+          mapfile -t CHANGED < <(git diff --name-only "$BEFORE" "${{ github.sha }}" -- notes/)
+
+          # 
+          if (( ${#CHANGED[@]} )); then
+            python3 -m scripts.gha.process "${CHANGED[@]}"
+          else
+            echo "No changes under notes/, skipping."
           fi
