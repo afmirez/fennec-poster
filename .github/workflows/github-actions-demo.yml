@@ -8,7 +8,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Greet the world
+      - name: Running Python Script
         run: |
           echo "Hello, GitHub Actions!"
           git fetch origin ${{ github.event.before }} --depth=1
