@@ -16,8 +16,8 @@ jobs:
         run: pip3 install -r scripts/gha/requirements.txt
       - name: Running Python Script
         run: |
-          echo "Hello, GitHub Actions!"
           git fetch origin ${{ github.event.before }} --depth=1
-          my_variable=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
-          echo "My shell variable is: $my_variable"
-          ls -lha
+          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -i "^notes/*")
+          if [[$changed_files]]; then
+            python3 -m scripts.gha.process $changed_files
+          fi
