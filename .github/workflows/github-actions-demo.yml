@@ -12,6 +12,6 @@ jobs:
         run: |
           echo "Hello, GitHub Actions!"
           git fetch origin ${{ github.event.before }} --depth=1
-          git diff --name-only ${{ github.event.before }} ${{ github.sha }} > changed_files.txt
-          cat changed_files.txt
+          my_variable=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }})
+          echo "My shell variable is: $my_variable"
           ls -lha
