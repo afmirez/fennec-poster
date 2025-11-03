@@ -9,4 +9,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Greet the world
-        run: echo "Hello, GitHub Actions!"
+        run: |
+          echo "Hello, GitHub Actions!"
+          git fetch origin ${{ github.event.before }} --depth=1
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }} > changed_files.txt
+          cat changed_files.txt
