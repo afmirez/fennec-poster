@@ -24,16 +24,17 @@ jobs:
 
         run: |
 
-          #  Use HEAD parent in case of new branches
+          # Determine the base commit (BEFORE) and handle the case of the first push to a branch.
+          # On the first push, GitHub sets "before" to 40 zeros, meaning there is no previous commit.
           BEFORE="${{ github.event.before }}"
           if [[ "$BEFORE" == "0000000000000000000000000000000000000000" ]]; then
             BEFORE="$(git rev-parse HEAD^ 2>/dev/null || echo HEAD)"
           fi
 
-          # We only care about files changed in /notes
+          # Get the list of changed files under the "notes/" directory
           mapfile -t CHANGED < <(git diff --name-only "$BEFORE" "${{ github.sha }}" -- notes/)
 
-          # 
+          # Run the Python processor if any files were changed
           if (( ${#CHANGED[@]} )); then
             python3 -m scripts.gha.process "${CHANGED[@]}"
           else
