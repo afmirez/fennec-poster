@@ -17,7 +17,7 @@ jobs:
       - name: Running Python Script
         run: |
           git fetch origin ${{ github.event.before }} --depth=1
-          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -i "^notes/*")
-          if [[$changed_files]]; then
+          changed_files=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -i "^notes/")
+          if [[ -n "$changed_files" ]]; then
             python3 -m scripts.gha.process $changed_files
           fi
