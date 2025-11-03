@@ -1,0 +1,12 @@
+name: Send File Data to Endpoint
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Greet the world
+        run: echo "Hello, GitHub Actions!"
