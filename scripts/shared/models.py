@@ -6,9 +6,10 @@ from scripts.shared.constants import ValidTags
 class Frontmatter:
     title: str = ""
     description: str = ""
-    category: str = ""
-    tags: list[ValidTags] = field(default_factory=list)
     order: Optional[int] = None
+    tags: list[ValidTags] = field(default_factory=list)
+    category: str = ""
+    id : str = ""
 
 @dataclass(slots=True)
 class ValidationResult:

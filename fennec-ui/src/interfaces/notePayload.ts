@@ -1,8 +1,10 @@
 export interface Frontmatter {
   title: string;
   description: string;
-  category: string;
+  order: number;
   tags: string[];
+  category: string;
+  id: string;
 }
 
 export interface NoteRecord {

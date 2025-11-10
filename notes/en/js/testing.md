@@ -1,15 +1,16 @@
 ---
-# FRONTMATTER INSTRUCTIONS:
-#  • Fill in all fields.
-#  • DO NOT modify 'Category'.
-#  • All values are strings, except 'Order' (integer).
-#  • 'Tags' must be a list of valid string tags.
+# 🧩 FRONTMATTER
+# • Fill in all fields.
+# • Use strings (except 'order' = integer).
+# • 'tags' must be a list of valid strings: JavaScript, Python.
+# • ⚠️ Do NOT edit 'category' or 'id'.
 
-title: "titlee"
-description: "description"
-category: js
+title: "dasd"
+description: "asdas"
+order: 2
 tags: ["JavaScript"]
-order: 1
+category: js
+id: "81e361a9-858b-47b8-b23f-641e5d26a2b9"
 ---
 
 This is just a test

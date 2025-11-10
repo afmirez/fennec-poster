@@ -31,12 +31,24 @@ jobs:
             BEFORE="$(git rev-parse HEAD^ 2>/dev/null || echo HEAD)"
           fi
 
-          # Get the list of changed files under the "notes/" directory
-          mapfile -t CHANGED < <(git diff --name-only "$BEFORE" "${{ github.sha }}" -- notes/)
+          # Get the list of ADDED or MODIFIED files under the "notes/" directory
+          mapfile -t CHANGED < <(git diff --name-only --diff-filter=AM "$BEFORE" "${{ github.sha }}" -- notes/)
 
-          # Run the Python processor if any files were changed
+          # Get the list of DELETED files under the "notes/" directory
+          mapfile -t DELETED < <(git diff --name-only --diff-filter=D "$BEFORE" "${{ github.sha }}" -- notes/)
+
+          # Run the Python processor for added/modified files
           if (( ${#CHANGED[@]} )); then
+            echo "Processing changed files: ${CHANGED[*]}"
             python3 -m scripts.gha.process "${CHANGED[@]}"
           else
-            echo "No changes under notes/, skipping."
+            echo "No added or modified files under notes/."
+          fi
+
+          # Run the deletion handler for deleted files
+          if (( ${#DELETED[@]} )); then
+            echo "Processing deleted files: ${DELETED[*]}"
+            python3 -m scripts.gha.delete "${DELETED[@]}"
+          else
+            echo "No deleted files under notes/."
           fi
