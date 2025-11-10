@@ -15,7 +15,8 @@ from scripts.shared.errors import FrontmatterValidationError
 from scripts.shared.frontmatter_utils import (
     is_frontmatter_present,
     check_frontmatter_validity,
-    get_content_after_frontmatter
+    get_content_after_frontmatter,
+    validate_unique_fields_per_category
 )
 
 @dataclass
@@ -45,6 +46,7 @@ def validate_process_data(file_paths: list[Path]) -> None:
     """
     try:
         payloads = []
+        existing_frontmatters : list[ dict[str, Any]] = []
 
         for path in file_paths:
              # Phase 1: Validate all files before creating objects
@@ -55,6 +57,7 @@ def validate_process_data(file_paths: list[Path]) -> None:
                 if not validation_result.ok:
                     msg = "Invalid frontmatter:\n- " + "\n- ".join(f"{path}: {e}" for e in validation_result.errors)
                     raise FrontmatterValidationError([msg])
+                existing_frontmatters.append(frontmatter_dict)
             else:
                 raise FrontmatterValidationError([f"File '{path}': missing frontmatter section."])
             
@@ -62,7 +65,13 @@ def validate_process_data(file_paths: list[Path]) -> None:
             payload = _get_payload(path, frontmatter_dict, file_content)
             payloads.append(asdict(payload))
 
-        # Phase 3: If no errors, print json data
+        # Phase 3: Ensure each category has unique 'title' and 'order' values across its notes.     
+        duplicate_errors: ValidationResult = validate_unique_fields_per_category(existing_frontmatters)
+        if not duplicate_errors.ok:
+            msg = "Duplicate values found:\n- " + "\n- ".join(f"{e}" for e in duplicate_errors.errors)
+            raise FrontmatterValidationError([msg])
+
+        # Phase 4: If no errors, print json data
         print(json.dumps(payloads, indent=4))
 
     except FileNotFoundError as e:
