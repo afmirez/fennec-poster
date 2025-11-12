@@ -4,14 +4,25 @@ import { handleUpsertNotes } from "@/services/noteService";
 import { removeCategoriesByName } from "@/services/categoryService";
 import { CategoryDeletionRequest } from "@/interfaces/categoryPayload";
 
+// export async function POST(request: Request) {
+//   const notesRecords: NoteRecord[] = await request.json();
+
+//   await handleUpsertNotes(notesRecords);
+
+//   return NextResponse.json({
+//     message: "Just a test",
+//   });
+// }
+
 export async function POST(request: Request) {
-  const notesRecords: NoteRecord[] = await request.json();
+  // Ver todas las cabeceras
+  console.log("HEADERS:", Object.fromEntries(request.headers));
 
-  await handleUpsertNotes(notesRecords);
+  // Ver el body (solo se puede leer una vez)
+  const body = await request.json();
+  console.log("BODY:", body);
 
-  return NextResponse.json({
-    message: "Just a test",
-  });
+  return NextResponse.json({ ok: true });
 }
 
 export async function DELETE(request: Request) {
@@ -25,5 +36,5 @@ export async function DELETE(request: Request) {
 }
 
 // 1. Detect deleted files from gha : construct small script and print appropiate payload : DONE
-// 2. Publish project in vercel :
-// 3. Setup auth de gha - endpoint
+// 2. Publish project in vercel : DONE
+// 3. Setup auth de gha - endpoint : IN PROGRESS
