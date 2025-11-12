@@ -14,5 +14,5 @@ export interface NoteRecord {
 
 export interface NoteDeletionRequest {
   category: string;
-  note_id: string;
+  note_title: string;
 }

@@ -81,6 +81,15 @@ jobs:
             -H "Content-Type: application/json" \
             -d "$PROCCESED_FILES"
 
+          if (( ${#DELETED[@]} )); then
+            echo "Processing deleted files: ${DELETED[*]}"
+
+            PROCCESED_FILES=$(python3 -m scripts.gha.delete "$BEFORE" "${DELETED[@]}")
+
+            curl --fail -s -o /dev/null -X DELETE https://fennec-poster.vercel.app/api \
+              -H "Authorization: Bearer ${{ steps.get_token.outputs.id_token }}" \
+              -H "Content-Type: application/json" \
+              -d "$PROCCESED_FILES"
           else
             echo "No deleted files under notes/."
           fi
