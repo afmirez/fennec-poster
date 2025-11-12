@@ -11,3 +11,8 @@ export interface NoteRecord {
   frontmatter: Frontmatter;
   html: string;
 }
+
+export interface NoteDeletionRequest {
+  category: string;
+  note_id: string;
+}

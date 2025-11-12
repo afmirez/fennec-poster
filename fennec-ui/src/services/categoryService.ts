@@ -4,6 +4,7 @@ import {
   createCategory,
   deleteCategoryByName,
   getCategoryIdByName,
+  categoryHasNotes,
 } from "@/repositories/categoryRepo";
 
 export async function createNewCategory(categoryName: string) {
@@ -40,12 +41,18 @@ export async function getNewAndExistingCategories(notes: NoteRecord[]) {
   };
 }
 
-export async function removeCategoriesByName(categories: string[]) {
-  for (const categoryName of categories) {
-    try {
-      await deleteCategoryByName(categoryName);
-    } catch (error) {
-      console.log("Error removing categories: ", error);
+export async function removeEmptyCategories(categories: string[]) {
+  const unique = [...new Set(categories.filter(Boolean))];
+  const toRemove: string[] = [];
+
+  for (const c of unique) {
+    const hasNotes = await categoryHasNotes(c);
+    if (!hasNotes) {
+      toRemove.push(c);
     }
+  }
+
+  for (const c of toRemove) {
+    await deleteCategoryByName(c);
   }
 }

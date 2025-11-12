@@ -1,8 +1,9 @@
-import { NoteRecord } from "@/interfaces/notePayload";
+import { NoteDeletionRequest, NoteRecord } from "@/interfaces/notePayload";
 import {
   createNote,
   noteExistsById,
   updateNote,
+  deleteNoteById,
 } from "@/repositories/noteRepo";
 
 import { Note } from "@/types/db";
@@ -10,6 +11,7 @@ import { handleTags } from "./tagService";
 import {
   createNewCategory,
   getNewAndExistingCategories,
+  removeEmptyCategories,
 } from "./categoryService";
 import { CategoryMaping } from "@/interfaces/categoryMaping";
 
@@ -156,4 +158,19 @@ async function updateNotes(categoryMap: CategoryMaping) {
     await updateNote(n.frontmatter.id, updatedNote);
     await handleTags(n);
   }
+}
+
+export async function handleDeleteNotes(notesToRemove: NoteDeletionRequest[]) {
+  const categories: string[] = [];
+
+  for (const n of notesToRemove) {
+    categories.push(n.category);
+    try {
+      await deleteNoteById(n.note_id);
+    } catch (error) {
+      console.log("Error removing note: ", error);
+    }
+  }
+
+  await removeEmptyCategories(categories);
 }

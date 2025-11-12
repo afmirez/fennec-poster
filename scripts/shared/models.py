@@ -15,3 +15,8 @@ class Frontmatter:
 class ValidationResult:
     ok: bool
     errors: list[str]
+
+@dataclass(slots=True)
+class DeleteNoteRequest:
+    category: str
+    note_id: str
