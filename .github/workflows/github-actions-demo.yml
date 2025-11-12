@@ -39,48 +39,60 @@ jobs:
 
       - name: Run processor for changed files under notes/
         shell: bash
-
         run: |
+          set -euo pipefail
+          set -x  # debug
 
-          # Determine the base commit (BEFORE) and handle the case of the first push to a branch.
-          # On the first push, GitHub sets "before" to 40 zeros, meaning there is no previous commit.
+          # 1) Calcular BEFORE de forma robusta
           BEFORE="${{ github.event.before }}"
-          if [[ "$BEFORE" == "0000000000000000000000000000000000000000" ]]; then
-            BEFORE="$(git rev-parse HEAD^ 2>/dev/null || echo HEAD)"
+          SHA="${{ github.sha }}"
+
+          # Si BEFORE viene vacío o 40 ceros, usa el padre del commit actual.
+          if [[ -z "${BEFORE:-}" || "$BEFORE" =~ ^0{40}$ ]]; then
+            # Si es un merge commit, toma el primer padre; si no, el padre único.
+            BEFORE="$(git rev-parse "${SHA}^1" 2>/dev/null || git rev-parse "${SHA}^" 2>/dev/null || echo HEAD)"
           fi
 
-          # Get the list of ADDED or MODIFIED files under the "notes/" directory
-          mapfile -t CHANGED < <(git diff --name-only --diff-filter=AM "$BEFORE" "${{ github.sha }}" -- notes/)
+          RANGE="${BEFORE}..${SHA}"
 
-          # Get the list of DELETED files under the "notes/" directory
-          mapfile -t DELETED < <(git diff --name-only --diff-filter=D "$BEFORE" "${{ github.sha }}" -- notes/)
+          echo "BEFORE: $BEFORE"
+          echo "SHA   : $SHA"
+          echo "RANGE : $RANGE"
 
-          # Run the Python processor for added/modified files
+          # 2) Diagnóstico útil
+          git --version
+          git log --oneline --decorate -n 10
+          git diff --name-status "$RANGE" -- 'notes/**' || true
+
+          # 3) Archivos cambiados (Add/Modify/Rename) y borrados
+          mapfile -t CHANGED < <(git diff --name-only --diff-filter=AMR "$RANGE" -- 'notes/**' || true)
+          mapfile -t DELETED < <(git diff --name-only --diff-filter=D   "$RANGE" -- 'notes/**' || true)
+
+          echo "CHANGED (${#CHANGED[@]}): ${CHANGED[*]:-<none>}"
+          echo "DELETED (${#DELETED[@]}): ${DELETED[*]:-<none>}"
+
+          # 4) Procesar añadidos/modificados
           if (( ${#CHANGED[@]} )); then
-            echo "Processing changed files: ${CHANGED[*]}"
-
+            echo "Processing changed files..."
             PROCCESED_FILES=$(python3 -m scripts.gha.process "${CHANGED[@]}")
 
-            curl -X POST https://fennec-poster.vercel.app/api \
-            -H "Authorization: Bearer ${{ steps.get_token.outputs.id_token }}" \
-            -H "Content-Type: application/json" \
-            -d "$PROCCESED_FILES"
-
+            curl --fail -s -o /dev/null -X POST https://fennec-poster.vercel.app/api \
+              -H "Authorization: Bearer ${{ steps.get_token.outputs.id_token }}" \
+              -H "Content-Type: application/json" \
+              -d "$PROCCESED_FILES"
           else
             echo "No added or modified files under notes/."
           fi
 
-          # Run the deletion handler for deleted files
+          # 5) Procesar borrados (lee contenido desde BEFORE con git show en tu script)
           if (( ${#DELETED[@]} )); then
-            echo "Processing deleted files: ${DELETED[*]}"
+            echo "Processing deleted files..."
+            PROCCESED_FILES=$(python3 -m scripts.gha.delete "$BEFORE" "${DELETED[@]}")
 
-            PROCCESED_FILES=$(python3 -m scripts.gha.delete "${DELETED[@]}")
-            
-            curl -X DELETE https://fennec-poster.vercel.app/api \
-            -H "Authorization: Bearer ${{ steps.get_token.outputs.id_token }}" \
-            -H "Content-Type: application/json" \
-            -d "$PROCCESED_FILES"
-
+            curl --fail -s -o /dev/null -X DELETE https://fennec-poster.vercel.app/api \
+              -H "Authorization: Bearer ${{ steps.get_token.outputs.id_token }}" \
+              -H "Content-Type: application/json" \
+              -d "$PROCCESED_FILES"
           else
             echo "No deleted files under notes/."
           fi
