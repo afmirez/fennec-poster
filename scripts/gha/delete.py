@@ -6,7 +6,7 @@ def main():
     raw_file_paths = sys.argv[1:]
     categories = sorted({Path(p).resolve().parent.name for p in raw_file_paths})
     output = {"categories": categories}
-    print(json.dumps(output, indent=4))
+    print(json.dumps(output))
 
 
 if __name__ == "__main__":

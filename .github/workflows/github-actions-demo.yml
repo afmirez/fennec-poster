@@ -5,6 +5,9 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout repository (full history)
         uses: actions/checkout@v4
@@ -18,6 +21,21 @@ jobs:
 
       - name: Installing dependencies
         run: pip3 install -r scripts/gha/requirements.txt
+
+      - name: Get OIDC token
+        id: get_token
+        run: |
+          TOKEN=$(curl -sS -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+            "${ACTIONS_ID_TOKEN_REQUEST_URL}" \
+            | jq -r '.value')
+
+          if [ -z "$TOKEN" ] || [ "$TOKEN" = "null" ]; then
+            echo "Failed to fetch OIDC token" >&2
+            exit 1
+          fi
+
+          # Publica como output (NO uses set-output; está deprecado)
+          echo "id_token=$TOKEN" >> "$GITHUB_OUTPUT"
 
       - name: Run processor for changed files under notes/
         shell: bash
@@ -40,7 +58,14 @@ jobs:
           # Run the Python processor for added/modified files
           if (( ${#CHANGED[@]} )); then
             echo "Processing changed files: ${CHANGED[*]}"
-            python3 -m scripts.gha.process "${CHANGED[@]}"
+
+            PROCCESED_FILES=$(python3 -m scripts.gha.process "${CHANGED[@]}")
+
+            curl -X POST https://fennec-poster.vercel.app/api \
+            -H "Authorization: Bearer ${{ steps.get_token.outputs.id_token }}" \
+            -H "Content-Type: application/json" \
+            -d "$PROCCESED_FILES"
+
           else
             echo "No added or modified files under notes/."
           fi
@@ -48,7 +73,14 @@ jobs:
           # Run the deletion handler for deleted files
           if (( ${#DELETED[@]} )); then
             echo "Processing deleted files: ${DELETED[*]}"
-            python3 -m scripts.gha.delete "${DELETED[@]}"
+
+            PROCCESED_FILES=$(python3 -m scripts.gha.delete "${DELETED[@]}")
+            
+            curl -X DELETE https://fennec-poster.vercel.app/api \
+            -H "Authorization: Bearer ${{ steps.get_token.outputs.id_token }}" \
+            -H "Content-Type: application/json" \
+            -d "$PROCCESED_FILES"
+
           else
             echo "No deleted files under notes/."
           fi
