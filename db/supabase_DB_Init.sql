@@ -148,7 +148,7 @@ to anon
 USING(true);
 
 -- ==========================================
--- RLS POLICIES - CONTENT TABLES
+-- RLS POLICIES - CONTENT TABLES (DELETE)
 -- ==========================================
 DROP POLICY IF EXISTS "Fennect UI can DELETE categories" on fennec_poster.category;
 CREATE POLICY "Fennect UI can DELETE categories"
@@ -160,6 +160,13 @@ USING(true);
 DROP POLICY IF EXISTS "Fennect UI can DELETE note_tags" on fennec_poster.note_tags;
 CREATE POLICY "Fennect UI can DELETE note_tags"
 ON fennec_poster.note_tags
+FOR DELETE
+to anon
+USING(true);
+
+DROP POLICY IF EXISTS "Fennect UI can DELETE notes" on fennec_poster.note;
+CREATE POLICY "Fennect UI can DELETE notes"
+ON fennec_poster.note
 FOR DELETE
 to anon
 USING(true);
