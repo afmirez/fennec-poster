@@ -7,7 +7,7 @@ from typing import Any
 
 
 from scripts.shared.constants import FRONTMATTER_BANNER, FRONTMATTER_DELIMITER, VALID_FRONTMATTER_FIELDS, VALID_TAGS, FrontmatterField
-from scripts.shared.models import Frontmatter, ValidationResult
+from scripts.shared.models import Frontmatter, ValidationResult, DeleteNoteRequest
 
 
 def is_frontmatter_present(file_data: str) -> dict[str, Any] | None:
@@ -110,3 +110,9 @@ def validate_unique_fields_per_category(frontmatters: list[dict[str, Any]]) -> V
 def get_content_after_frontmatter(file_data: str) -> str:
     parts = re.split(r"^---\s*\n.*?\n---\s*\n?", file_data, maxsplit=1, flags=re.DOTALL)
     return parts[1] if len(parts) > 1 else file_data
+
+def get_delete_request(frontmatter : dict[str, Any]) -> DeleteNoteRequest:
+    return DeleteNoteRequest (
+        category= frontmatter.get(FrontmatterField.CATEGORY.value),
+        note_id=frontmatter.get(FrontmatterField.ID.value),
+    )

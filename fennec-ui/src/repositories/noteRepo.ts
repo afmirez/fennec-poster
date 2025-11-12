@@ -30,3 +30,11 @@ export async function updateNote(noteId: string, note: Partial<Note>) {
 
   if (error) throw new Error(error.message);
 }
+
+export async function deleteNoteById(noteId: string) {
+  const supabase = await createClient();
+
+  const { error } = await supabase.from("note").delete().eq("id", noteId);
+
+  if (error) throw new Error(error.message);
+}
