@@ -72,7 +72,7 @@ def validate_process_data(file_paths: list[Path]) -> None:
             raise FrontmatterValidationError([msg])
 
         # Phase 4: If no errors, print json data
-        print(json.dumps(payloads, indent=4))
+        print(json.dumps(payloads))
 
     except FileNotFoundError as e:
         raise FileNotFoundError(f"Could not open file: {path}") from e
