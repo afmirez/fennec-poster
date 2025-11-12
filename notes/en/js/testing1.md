@@ -5,8 +5,8 @@
 # • 'tags' must be a list of valid strings: JavaScript, Python.
 # • ⚠️ Do NOT edit 'category' or 'id'.
 
-title: "ooo"
-description: "xxx"
+title: "TITLE 1"
+description: "DESCRIPTION 1"
 order: 1
 tags: ["JavaScript"]
 category: js
