@@ -5,10 +5,10 @@
 # • 'tags' must be a list of valid strings: JavaScript, Python.
 # • ⚠️ Do NOT edit 'category' or 'id'.
 
-title: "I am changing title"
-description: "Also the description :)"
+title: "TITLE"
+description: "DESCRIPTION"
 order: 2
-tags: ["JavaScript", "Python"]
+tags: ["JavaScript"]
 category: js
 id: "81e361a9-858b-47b8-b23f-641e5d26a2b9"
 ---
