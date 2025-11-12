@@ -4,8 +4,7 @@ const GH_ISSUER = "https://token.actions.githubusercontent.com";
 const GH_JWKS = createRemoteJWKSet(new URL(`${GH_ISSUER}/.well-known/jwks`));
 
 const EXPECTED_AUD = "https://github.com/afmirez";
-// const EXPECTED_BRANCH =
-//   "repo:afmirez/fennec-poster:ref:refs/heads/OIDC-gha-nextjs-endpoints";
+const EXPECTED_BRANCH = "repo:afmirez/fennec-poster:ref:refs/heads/main";
 
 export async function verifyGithubOIDCToken(
   authHeader: string
@@ -18,9 +17,9 @@ export async function verifyGithubOIDCToken(
       audience: EXPECTED_AUD,
     });
 
-    // if (payload.sub !== EXPECTED_BRANCH) {
-    //   throw new Error("Incorrect branch");
-    // }
+    if (payload.sub !== EXPECTED_BRANCH) {
+      throw new Error("Incorrect branch");
+    }
 
     return payload;
   } catch (err: unknown) {
