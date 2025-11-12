@@ -2,21 +2,14 @@
 
 <img width="404" height="404" alt="fennec" src="https://github.com/user-attachments/assets/bd3c1d0f-49d4-4485-b1b3-d0b60d1a1fc4" />
 
-> ⚠️ This is an early-stage project. Expect frequent updates as the system evolves.
+I wanted to write my notes in Obsidian and have them automatically published to a static site, so I built Fennec Poster.
 
-## Overview
+Fennec Poster automates the publishing of my study notes.
 
-The goal of **Fennec Poster** is to automate the process of publishing Markdown notes:
+Main components:
+- Pre-commit hook: Adds and validates frontmatter for each note in /notes.
+- GitHub Action: Detects file changes (additions, edits, deletions), revalidates them, and sends a request to the Next.js app.
+- Next.js API: Exposes two GitHub OIDC-secured endpoints that handle authentication and database updates.
+- Frontend: Fetches data from the database and displays it.
 
-1. **Upload a Markdown file** → pushed to a GitHub repository.  
-2. **CI/CD pipeline (GitHub Actions)** → extracts the file's *frontmatter* and sends it to a backend endpoint.  
-3. **Next.js static site** → renders the notes using the stored metadata from **Supabase (Postgres)**.
-
-## Structure (planned)
-
-| Component | Description | Status |
-|------------|-------------|--------|
-| `pre-commit/` | Adds and validates frontmatter | ✅ Done |
-| `ci/` | GitHub Actions pipeline for metadata sync | 🕓 Planned |
-| `web/` | Next.js static site to render notes | 🕓 Planned |
-| `db/` | Supabase (Postgres) backend | 🕓 Planned |
+This is an experimental, slightly messy project...the first step toward a more complete portfolio/blog.
