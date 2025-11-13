@@ -34,44 +34,25 @@ jobs:
             exit 1
           fi
 
-          # Publica como output (NO uses set-output; está deprecado)
           echo "id_token=$TOKEN" >> "$GITHUB_OUTPUT"
 
       - name: Run processor for changed files under notes/
         shell: bash
         run: |
           set -euo pipefail
-          set -x  # debug
 
-          # 1) Calcular BEFORE de forma robusta
           BEFORE="${{ github.event.before }}"
           SHA="${{ github.sha }}"
 
-          # Si BEFORE viene vacío o 40 ceros, usa el padre del commit actual.
           if [[ -z "${BEFORE:-}" || "$BEFORE" =~ ^0{40}$ ]]; then
-            # Si es un merge commit, toma el primer padre; si no, el padre único.
             BEFORE="$(git rev-parse "${SHA}^1" 2>/dev/null || git rev-parse "${SHA}^" 2>/dev/null || echo HEAD)"
           fi
 
           RANGE="${BEFORE}..${SHA}"
 
-          echo "BEFORE: $BEFORE"
-          echo "SHA   : $SHA"
-          echo "RANGE : $RANGE"
-
-          # 2) Diagnóstico útil
-          git --version
-          git log --oneline --decorate -n 10
-          git diff --name-status "$RANGE" -- 'notes/**' || true
-
-          # 3) Archivos cambiados (Add/Modify/Rename) y borrados
           mapfile -t CHANGED < <(git diff --name-only --diff-filter=AMR "$RANGE" -- 'notes/**' || true)
           mapfile -t DELETED < <(git diff --name-only --diff-filter=D   "$RANGE" -- 'notes/**' || true)
 
-          echo "CHANGED (${#CHANGED[@]}): ${CHANGED[*]:-<none>}"
-          echo "DELETED (${#DELETED[@]}): ${DELETED[*]:-<none>}"
-
-          # 4) Procesar añadidos/modificados
           if (( ${#CHANGED[@]} )); then
             echo "Processing changed files..."
             PROCCESED_FILES=$(python3 -m scripts.gha.process "${CHANGED[@]}")
@@ -84,7 +65,6 @@ jobs:
             echo "No added or modified files under notes/."
           fi
 
-          # 5) Procesar borrados (lee contenido desde BEFORE con git show en tu script)
           if (( ${#DELETED[@]} )); then
             echo "Processing deleted files..."
             PROCCESED_FILES=$(python3 -m scripts.gha.delete "$BEFORE" "${DELETED[@]}")
