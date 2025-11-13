@@ -46,17 +46,14 @@ export async function removeEmptyCategories(categories: string[]) {
   const toRemove: string[] = [];
 
   for (const c of unique) {
-    console.log("Validation 1");
     const hasNotes = await categoryHasNotes(c);
-    console.log("Validation 2");
+
     if (!hasNotes) {
       toRemove.push(c);
     }
   }
 
   for (const c of toRemove) {
-    console.log("Validation 3");
     await deleteCategoryByName(c);
-    console.log("Validation 4");
   }
 }

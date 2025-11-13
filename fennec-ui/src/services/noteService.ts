@@ -172,7 +172,5 @@ export async function handleDeleteNotes(notesToRemove: NoteDeletionRequest[]) {
     }
   }
 
-  console.log("error here");
-
   await removeEmptyCategories(categories);
 }
