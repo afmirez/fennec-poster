@@ -44,12 +44,12 @@ export async function deleteCategoryByName(categoryName: string) {
 export async function categoryHasNotes(categoryName: string) {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { count, error } = await supabase
     .from("note")
-    .select("id", { count: "exact", head: true })
+    .select("*", { count: "exact", head: true })
     .eq("name", categoryName);
 
   if (error) throw new Error(error.message);
 
-  return (data && data.length > 0) || false;
+  return (count ?? 0) > 0;
 }
