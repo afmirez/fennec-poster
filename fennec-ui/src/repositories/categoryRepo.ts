@@ -47,7 +47,7 @@ export async function categoryHasNotes(categoryName: string) {
   const { data, error } = await supabase
     .from("note")
     .select("id", { count: "exact", head: true })
-    .eq("category", categoryName);
+    .eq("name", categoryName);
 
   if (error) throw new Error(error.message);
 
