@@ -13,8 +13,8 @@
   flex-direction: column;
   flex: 1;
   width: 90%;
-  max-width: 50rem;
-  background-color: burlywood;
+  max-width: 100rem;
+  /* background-color: burlywood; */
 
   > .header {
     height: 5rem;
@@ -23,6 +23,7 @@
   }
 
   > .content {
+    display: flex;
     flex: 1;
     background-color: blue;
   }
