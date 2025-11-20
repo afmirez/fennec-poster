@@ -5,7 +5,13 @@ import {
   deleteCategoryByName,
   getCategoryIdByName,
   categoryHasNotes,
+  getAllCategories,
 } from "@/repositories/categoryRepo";
+import { Category } from "@/types/db";
+
+export async function fetchCategories() {
+  const data: Category[] = await getAllCategories();
+}
 
 export async function createNewCategory(categoryName: string) {
   return await createCategory(categoryName);

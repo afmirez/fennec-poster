@@ -15,6 +15,20 @@ export async function noteExistsById(id: string) {
   return !!data;
 }
 
+export async function getNoteById(id: string) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("note")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) throw new Error(error.message);
+
+  return data;
+}
+
 export async function createNote(note: Note) {
   const supabase = await createClient();
 
@@ -37,4 +51,18 @@ export async function deleteNoteById(noteId: string) {
   const { error } = await supabase.from("note").delete().eq("id", noteId);
 
   if (error) throw new Error(error.message);
+}
+
+export async function getNotesByCategory(categoryId: string) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("note")
+    .select("id, title, sort_order")
+    .eq("category_id", categoryId)
+    .order("sort_order", { ascending: true });
+
+  if (error) throw new Error(error.message);
+
+  return data;
 }

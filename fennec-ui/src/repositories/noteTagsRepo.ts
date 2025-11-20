@@ -18,7 +18,7 @@ export async function getNoteTags(noteId: string) {
 
   const { data, error } = await supabase
     .from("note_tags")
-    .select("tag_id")
+    .select("*")
     .eq("note_id", noteId);
 
   if (error) throw new Error(error.message);

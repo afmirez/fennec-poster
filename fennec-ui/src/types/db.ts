@@ -255,3 +255,4 @@ export const Constants = {
 export type Category = Database["fennec_poster"]["Tables"]["category"]["Row"];
 export type Note = Database["fennec_poster"]["Tables"]["note"]["Row"];
 export type Tag = Database["fennec_poster"]["Tables"]["tag"]["Row"];
+export type NoteTag = Database["fennec_poster"]["Tables"]["note_tags"]["Row"];
