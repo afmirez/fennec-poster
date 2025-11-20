@@ -1,0 +1,12 @@
+.iconButton {
+  background-color: inherit;
+  color: var(--text-secondary);
+  border: none;
+  cursor: pointer;
+  transform-origin: bottom center;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}

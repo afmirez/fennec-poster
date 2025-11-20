@@ -1,5 +1,15 @@
 import { createClient } from "@/lib/supabase/server";
 
+export async function getAllCategories() {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.from("category").select("*");
+
+  if (error) throw new Error(error.message);
+
+  return data;
+}
+
 export async function createCategory(name: string) {
   const supabase = await createClient();
 

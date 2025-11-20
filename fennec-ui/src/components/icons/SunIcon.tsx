@@ -1,0 +1,9 @@
+import IconBase from './IconBase';
+
+export default function SunIcon(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <IconBase {...props}>
+      <path d="M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0m-4-9v2m0 14.004v2M5 12H3m18 0h-2m0-7-2 2M5 5l2 2m0 10-2 2m14 0-2-2" />
+    </IconBase>
+  );
+}

@@ -14,18 +14,34 @@
   flex: 1;
   width: 90%;
   max-width: 100rem;
-  /* background-color: burlywood; */
 
   > .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     height: 5rem;
-    background-color: red;
+
     margin-bottom: 1rem;
+
+    > img {
+      user-select: none;
+      pointer-events: none;
+    }
+
+    > .headerMenu {
+      display: flex;
+      flex-direction: row;
+      gap: 0.5rem;
+    }
   }
 
   > .content {
     display: flex;
     flex: 1;
-    background-color: blue;
+
+    &.fadeIn {
+      animation: fadeIn 0.6s ease forwards;
+    }
   }
 
   > .footer {

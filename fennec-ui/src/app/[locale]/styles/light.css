@@ -1,10 +1,10 @@
 :root.light {
-  --color-bg: #fafafa;
-  --color-text: #1a1a1a;
-  --color-text-secondary: #5c5c5c;
-  --color-accent: #0077cc;
-  --color-border: #e5e5e5;
-  --color-code-bg: #f5f5f5;
-  --color-action: #ff6b6b;
+  --background: #ffffff;
+  --base-text: #000000;
+  --text-secondary: #4b4e55;
+  --border-color: #000000;
+  --white-color: #ececec;
+  --color-accent: #015551;
+  --color-highlight: #52357b;
   --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
