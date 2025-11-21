@@ -11,6 +11,7 @@ import { Category } from "@/types/db";
 
 export async function fetchCategories() {
   const data: Category[] = await getAllCategories();
+  return data;
 }
 
 export async function createNewCategory(categoryName: string) {

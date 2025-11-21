@@ -12,6 +12,8 @@ import { ICON_KEYS } from "@/types/icon-keys.type";
 import IconButton from "@/components/IconButton/IconButton";
 import Image from "next/image";
 
+import Link from "next/link";
+
 export default function MainLayout({
   children,
 }: {
@@ -57,7 +59,17 @@ export default function MainLayout({
               </ul>
             </header>
             <main className={styles.content}>{children}</main>
-            <footer className={styles.footer}></footer>
+            <footer className={styles.footer}>
+              {mounted && (
+                <div>
+                  <span>
+                    Authored by <Link href="https://www.afmirez.dev/">me</Link>.
+                    Data is open — clone it, break it, or improve it. The code
+                    is a bit messy, but it works… mostly.
+                  </span>
+                </div>
+              )}
+            </footer>
           </div>
         </div>
       )}
