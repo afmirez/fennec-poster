@@ -64,16 +64,6 @@
   }
 }
 
-/* :root.dark {
-  --background: #000000;
-  --base-text: #ececec;
-  --text-secondary: #999999;
-  --text-tertiary: #ffffffa3;
-  --border-color: #27272a;
-  --color-accent: #0b99b6;
-  --color-highlight: #fffa8d;
-} */
-
 .homeContainer {
   display: flex;
   flex-direction: column;

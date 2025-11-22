@@ -58,7 +58,7 @@ export async function getNotesByCategory(categoryId: string) {
 
   const { data, error } = await supabase
     .from("note")
-    .select("id, title, sort_order")
+    .select("id, title")
     .eq("category_id", categoryId)
     .order("sort_order", { ascending: true });
 

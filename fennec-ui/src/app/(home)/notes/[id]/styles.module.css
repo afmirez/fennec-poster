@@ -1,0 +1,41 @@
+.layout {
+  display: flex;
+  flex: 1;
+
+  > .aside {
+    display: none;
+    width: 0rem;
+  }
+
+  > .content {
+    flex: 1;
+    background-color: green;
+  }
+}
+
+@media (min-width: 768px) {
+  .layout {
+    > .aside {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      width: 30rem;
+      margin-top: 3rem;
+      user-select: none;
+
+      h3 {
+        font-size: var(--font-lg);
+        font-weight: var(--weight-bold);
+      }
+
+      ul li {
+        font-size: var(--font-md);
+        font-weight: var(--weight-medium);
+        margin-bottom: 0.6rem;
+        color: var(--color-accent);
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+  }
+}

@@ -218,7 +218,7 @@ export async function getTagsPerNote(noteId: string) {
     throw new Error(`Error loading tags for note ${noteId}: ${err.message}`);
   }
 
-  let tags: Tag[] = [];
+  const tags: Tag[] = [];
 
   try {
     for (const note_tag of note_tags) {
