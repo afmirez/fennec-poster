@@ -9,7 +9,6 @@
 
   > .content {
     flex: 1;
-    background-color: green;
   }
 }
 
@@ -18,10 +17,18 @@
     > .aside {
       display: flex;
       flex-direction: column;
-      gap: 2rem;
+      gap: 1.2rem;
       width: 30rem;
       margin-top: 3rem;
       user-select: none;
+      overflow-y: auto;
+
+      a {
+        font-size: var(--font-md);
+        text-decoration: underline;
+        color: var(--text-tertiary);
+        margin-bottom: 2rem;
+      }
 
       h3 {
         font-size: var(--font-lg);
@@ -29,12 +36,15 @@
       }
 
       ul li {
-        font-size: var(--font-md);
-        font-weight: var(--weight-medium);
         margin-bottom: 0.6rem;
-        color: var(--color-accent);
-        text-decoration: underline;
-        cursor: pointer;
+
+        a {
+          font-size: var(--font-md);
+          font-weight: var(--weight-medium);
+          color: var(--color-accent);
+          text-decoration: underline;
+          cursor: pointer;
+        }
       }
     }
   }

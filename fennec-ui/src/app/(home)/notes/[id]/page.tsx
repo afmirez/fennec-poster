@@ -1,20 +1,20 @@
-import styles from "./styles.module.css";
-import { FC } from "react";
+import { redirect } from "next/navigation";
+import { getCategoryNotesMeta } from "@/services/noteService";
 
-interface PostPageProps {
-  params: {
-    id: string;
-  };
+interface NotesPageProps {
+  params: { id: string };
 }
 
-const PostPage: FC<PostPageProps> = async ({ params }) => {
-  const { id } = params;
+export default async function NotesPage({ params }: NotesPageProps) {
+  const { id } = await params;
 
-  return (
-    <div className={styles.container}>
-      <h1>This is from Fennec NOTEEEEES Page component</h1>
-    </div>
-  );
-};
+  const notesMeta = await getCategoryNotesMeta(id);
 
-export default PostPage;
+  if (!notesMeta.length) {
+    return <p>No notes available in this category.</p>;
+  }
+
+  const firstNoteId = notesMeta[0].id;
+
+  redirect(`/notes/${id}/${firstNoteId}`);
+}

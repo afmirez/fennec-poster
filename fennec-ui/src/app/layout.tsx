@@ -6,7 +6,7 @@ import { THEME, type Theme } from "@/types/theme.type";
 import { LoaderProvider } from "@/context/loader.context";
 
 export const metadata: Metadata = {
-  title: "Andrés Ramírez | Tech Notes",
+  title: "Tech Notes by Andrés Ramírez",
   description: "Personal Notes.",
 };
 

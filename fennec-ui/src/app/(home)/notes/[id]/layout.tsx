@@ -1,5 +1,6 @@
 import { getCategoryNotesMeta } from "@/services/noteService";
 import styles from "./styles.module.css";
+import Link from "next/link";
 
 interface NotesLayoutProps {
   children: React.ReactNode;
@@ -18,12 +19,12 @@ export default async function NotesLayout({
   return (
     <div className={styles.layout}>
       <aside className={styles.aside}>
+        <Link href={"/"}>Go home</Link>
         <h3>On this category</h3>
         <ul>
           {notesMeta.map(({ id: noteId, title }) => (
             <li key={noteId} className={styles.noteLink}>
-              {" "}
-              {title}
+              <Link href={`/notes/${id}/${noteId}`}>{title}</Link>
             </li>
           ))}
         </ul>
