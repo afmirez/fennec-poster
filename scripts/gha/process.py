@@ -30,10 +30,20 @@ def _get_payload(path: Path, frontmatter_dict : dict[str, Any], markdown_content
     and Markdown converted to HTML.
     """
     try:
-        return GHARequestPayload (
-                frontmatter=Frontmatter(**frontmatter_dict),
-                html=markdown.markdown(get_content_after_frontmatter(markdown_content))
-            )
+        html = markdown.markdown(
+            get_content_after_frontmatter(markdown_content),
+            extensions=[
+                "fenced_code",   
+                "codehilite",   
+                "tables",        
+                "toc",         
+            ]
+        )
+
+        return GHARequestPayload(
+            frontmatter=Frontmatter(**frontmatter_dict),
+            html=html,
+        )
     except Exception as e:
         raise FrontmatterValidationError([f"Error converting Markdown in '{path}': {e}"])
 
