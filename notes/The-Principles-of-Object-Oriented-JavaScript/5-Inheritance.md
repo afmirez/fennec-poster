@@ -32,7 +32,7 @@ These two are special because they control how objects behave when converted to 
 
 - **\*`valueOf()`** → returns the **primitive value** that represents the object. JavaScript calls this method automatically when an object is used in a numeric or logical context. You can override it to define how your object behaves in calculations.
 
-```js
+```
 const counter = {
   count: 3,
   valueOf() {
@@ -44,7 +44,7 @@ console.log(counter + 2); // 5
 
 - **`toString()`** → returns a **string representation** of the object. It’s called when the object is used in a string context (like concatenation or template literals). Overriding it makes your objects display more meaningful text.
 
-```js
+```
 const user = {
   name: "Alice",
   toString() {
@@ -59,7 +59,7 @@ console.log(`${user}`); // "User: Alice"
 While it’s **technically possible** to modify `Object.prototype`, doing so is **strongly discouraged**.  
 Every object in JavaScript inherits from it, so any changes affect **all objects**, which can cause bugs, naming conflicts, and unexpected behavior. Example of what _not_ to do:
 
-```js
+```
 Object.prototype.add = function (v) {
   return this + v;
 };
@@ -75,7 +75,7 @@ The simplest form of inheritance in JavaScript is **object-to-object inheritance
 
 By default, object literals inherit from **`Object.prototype`**, but you can explicitly set an object’s **`[[Prototype]]`** using **`Object.create()`**.
 
-```js
+```
 const parent = {
   greet() {
     return "Hello";
@@ -98,7 +98,7 @@ Every function has a **`prototype`** object that inherits from **`Object.prototy
 
 So, instances created with `new` form a chain: `instance → Constructor.prototype → Object.prototype`.
 
-```js
+```
 function Person(name) {
   this.name = name;
 }
@@ -113,7 +113,7 @@ When changing the prototype chain manually (for example, linking a constructor�
 - The constructor can run **safely without required arguments**.
 - It doesn’t modify **global state**, since it may be called only to set up inheritance, not to create real instances.
 
-```js
+```
 function Animal() {
   this.type = "mammal";
 }
@@ -132,7 +132,7 @@ console.log(rex.type); // "mammal"
 
 In JavaScript, a **subtype constructor** can call its **supertype constructor** using `call()` or `apply()` to initialize inherited properties. This technique is called **constructor stealing** and is often combined with **prototype inheritance** — together known as **pseudoclassical inheritance**.
 
-```js
+```
 function Animal(type) {
   this.type = type;
 }
@@ -160,7 +160,7 @@ console.log(rex.name); // "Rex"
 
 When a **subtype** overrides a method from its **supertype**, you can still call the original version by accessing it directly on the supertype’s prototype and using `call()` or `apply()` to run it in the subtype’s context.
 
-```js
+```
 function Animal(name) {
   this.name = name;
 }

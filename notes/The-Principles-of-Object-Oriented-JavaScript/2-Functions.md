@@ -27,7 +27,7 @@ JavaScript has two literal forms of functions:
 
 - **Function declarations**: use the `function` keyword followed by a name. These are **hoisted** to the top of their scope, so they can be called before their actual definition in code.
 
-```js
+```
 // Works even before definition (hoisting)
 sayHi();
 
@@ -38,7 +38,7 @@ function sayHi() {
 
 - **Function expressions**: can be anonymous or assigned to a variable. They are **not hoisted**, meaning they can only be used after the point where they are defined.
 
-```js
+```
 // sayHi(); // Error: Cannot access before initialization
 
 const sayHi = function () {
@@ -56,7 +56,7 @@ JavaScript has first-class functions, so you can use them just as you do any oth
 
 You can use a function anywhere you would use any other reference value.
 
-```js
+```
 // 1. Assign a function to a variable
 function greet() {
   console.log("Hello!");
@@ -104,7 +104,7 @@ A function in JavaScript can be called with **any number of arguments**, regardl
 - Parameters are **position-based**, so the order in which you pass values determines how they are assigned.
 - The function’s `.length` property reflects the **number of declared parameters**, not how many were actually passed.
 
-```js
+```
 function demo(a, b, c) {
   console.log("a:", a);
   console.log("b:", b);
@@ -127,7 +127,7 @@ demo(1, 2, 3, 4, 5);
 
 Using arguments
 
-```js
+```
 function sum() {
   let result = 0;
   let i = 0;
@@ -147,7 +147,7 @@ console.log(sum(5, 10)); // 15
 
 Modern Approach: Rest Parameters
 
-```js
+```
 function sum(...args) {
   return args.reduce((acc, n) => acc + n, 0);
 }
@@ -166,7 +166,7 @@ You can handle variations by checking parameters:
 - With `arguments.length`
 - Or by testing if a named parameter is `undefined` (more common).
 
-```js
+```
 function greet(name) {
   if (name === undefined) {
     console.log("Hello!");
@@ -191,7 +191,7 @@ In JavaScript, functions need a way to know **which object they belong to at the
 
 This design makes it possible to write one function and reuse it across different objects without rewriting the code:``
 
-```js
+```
 function sayNameForAll() {
   console.log(this.name);
 }
@@ -213,7 +213,7 @@ You can change the value of `this` to achieve different goals.
 
 - The `call()` method lets you execute a function immediately while explicitly setting what `this` refers to. The first argument defines the value of `this`, and any following arguments are passed to the function. This is useful when you want to reuse a function across different objects or control the execution context directly.
 
-```js
+```
 function sayNameForAll(label) {
   console.log(label + ":" + this.name);
 }
@@ -229,7 +229,7 @@ sayNameForAll.apply(person2, ["person2"]); // outputs "person2:Greg"
 
 - The `apply()` method works exactly like `call()`: it executes a function immediately with an explicitly set `this` value. The difference is that `apply()` only takes two arguments—the value for `this` and an array (or array-like object) of parameters. This makes it convenient when your data is already in an array, while `call()` is better when you have individual variables.
 
-```js
+```
 function greet(greeting, punctuation) {
   console.log(greeting + ", " + this.name + punctuation);
 }
@@ -240,7 +240,7 @@ greet.apply(person, ["Hello", "!"]); // Hello, Alice!
 
 - The `bind()` method works like `call()` and `apply()` in that it lets you set the value of `this`, but instead of executing the function immediately, it returns a **new function** with `this` permanently bound to the given value. You can then call that new function later, optionally passing arguments. This is useful when you want to fix the execution context for callbacks or event handlers.
 
-```js
+```
 function greet(greeting, punctuation) {
   console.log(greeting + ", " + this.name + punctuation);
 }

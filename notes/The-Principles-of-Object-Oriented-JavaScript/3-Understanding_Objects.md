@@ -24,7 +24,7 @@ Objects are open by default, you can freely add or change properties. unless the
 - When you **add a new property**, the engine uses the internal method **`[[Put]]`**. This creates a new “slot” in the object and stores the property as its **own property**.
 - When you **assign a new value** to an **existing property**, JavaScript uses **`[[Set]]`** instead. This doesn’t create anything new—it simply replaces the old value with the new one.
 
-```js
+```
 const user = {};
 user.name = "Naruto"; // [[Put]]
 user.name = "Sasuke"; // [[Set]]
@@ -42,7 +42,7 @@ Finally, **`obj.hasOwnProperty('prop')`** checks whether the property belongs **
 
 The delete operator works on a single object property and calls an internal operation named `[[Delete]]
 
-```js
+```
 var person1 = { name: "Nicholas" };
 
 console.log("name" in person1); // true
@@ -70,7 +70,7 @@ In JavaScript, there are **two types of object properties**:
    - a **getter** (runs when the property is read)
    - a **setter** (runs when a value is assigned)
 
-```js
+```
 const user = {
   _name: "Alice", // underscore often marks a private field
   get name() {
@@ -102,7 +102,7 @@ Both **data properties** and **accessor properties** share two important attribu
 
 You can modify these attributes using **`Object.defineProperty()`**, which lets you explicitly define how a property behaves:
 
-```js
+```
 Object.defineProperty(obj, "name", {
   enumerable: false,
   configurable: false,
@@ -123,7 +123,7 @@ In addition to the shared attributes, data properties have **two unique attribut
    - `false` → the value is read-only.
    - By default, all properties are **writable**.
 
-```js
+```
 Object.defineProperty(obj, "id", {
   value: 42,
   writable: false,
@@ -138,7 +138,7 @@ Object.defineProperty(obj, "id", {
 2. **`[[Set]]`** – a function that runs when a **new value is assigned**.
    These functions control how a property behaves rather than storing a static value.
 
-```js
+```
 const user = { _name: "Alice" };
 
 Object.defineProperty(user, "name", {
@@ -164,7 +164,7 @@ It’s also possible to define multiple properties on an object simultaneously i
 1. The **target object** to modify.
 2. An **object of property descriptors**, where each key is a property name and each value defines that property’s attributes.
 
-```js
+```
 const user = {};
 
 Object.defineProperties(user, {
@@ -194,7 +194,7 @@ To **inspect a property’s attributes** in JavaScript, you can use
 - `enumerable`
 - and either `value`/`writable` (for data properties) or `get`/`set` (for accessor properties).
 
-```js
+```
 const user = { name: "Alice" };
 const descriptor = Object.getOwnPropertyDescriptor(user, "name");
 console.log(descriptor);
@@ -215,7 +215,7 @@ Existing properties remain unchanged, but you can still **modify** or **delete**
 
 - Check if an object is extensible with **`Object.isExtensible(obj)`**.
 
-```js
+```
 const user = { name: "Alice" };
 Object.preventExtensions(user);
 user.age = 30; // fails silently (or throws in strict mode)
@@ -227,7 +227,7 @@ user.age = 30; // fails silently (or throws in strict mode)
 
 - Check if an object is sealed with **`Object.isSealed(obj)`**.
 
-```js
+```
 const user = { name: "Alice" };
 Object.seal(user);
 delete user.name; // fails
@@ -240,7 +240,7 @@ user.name = "Bob"; // works
 
 - Check if an object is frozen with **`Object.isFrozen(obj)`**.
 
-```js
+```
 const user = { name: "Alice" };
 Object.freeze(user);
 user.name = "Bob"; // fails

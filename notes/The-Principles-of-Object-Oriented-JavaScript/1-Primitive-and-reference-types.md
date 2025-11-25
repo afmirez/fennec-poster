@@ -39,7 +39,7 @@ In JavaScript, primitive values `boolean`, `number`, and `string` are not object
 
 When you call a method on a primitive:
 
-```js
+```
 const name = "Goku";
 console.log(name.toUpperCase());
 ```
@@ -56,7 +56,7 @@ Represent objects in JavaScript. An object is an unordered collection of propert
 
 A **constructor** is just a function invoked with `new` to create an object:
 
-```js
+```
 var object = new Object();
 ```
 
@@ -73,7 +73,7 @@ Object and Array Literals
 
 Function literals: Almost always defined with their literal form
 
-```js
+```
 function reflect(value) {
   return value;
 }
@@ -81,7 +81,7 @@ function reflect(value) {
 
 Regular Expression Literals: Defined with `/pattern/flags` instead of `new RegExp()`.
 
-```js
+```
 var numbers = /\d+/g;
 ```
 
@@ -89,7 +89,7 @@ var numbers = /\d+/g;
 
 Name/value pairs stored on an object. They can be accessed with **dot notation** or with **bracket notation**, where the property name is given as a string.
 
-```js
+```
 var arr = [];
 array.push("Hello");
 array["push"]("Bye");
@@ -101,7 +101,7 @@ When working with objects, `typeof` isn’t very helpful because it returns `"ob
 
 `instanceof` is more useful: it checks whether a value was created by a specific constructor. It takes an object and a constructor as parameters, returning `true` if the object is an instance of that type, and `false` otherwise.
 
-```js
+```
 var items = [];
 var object = {};
 function reflect(value) {

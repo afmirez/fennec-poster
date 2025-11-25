@@ -24,7 +24,7 @@ Using a leading underscore (e.g. `_name`) is just a **convention**, not real pro
 
 The **module pattern** creates **singleton objects with private data** using an **immediately invoked function expression (IIFE)**. The IIFE defines local variables (private) and returns an object with methods (public) that can access them — these are called **privileged methods**.
 
-```js
+```
 const counter = (function () {
   let count = 0; // private
   return {
@@ -42,7 +42,7 @@ Here, `count` is hidden from the outside but accessible through the returned met
 
 A variation called the **revealing module pattern** defines all variables and functions at the top of the IIFE, then returns an object that maps the public API:
 
-```js
+```
 const counter = (function () {
   let count = 0;
   function increment() {
@@ -59,7 +59,7 @@ const counter = (function () {
 
 You can use a **module-like pattern inside a constructor** to create **private, instance-specific data**. This works by defining variables inside the constructor’s scope and exposing them through methods defined within it.
 
-```js
+```
 function User(name) {
   let _name = name; // private
   this.getName = () => _name;
@@ -73,7 +73,7 @@ This approach keeps data private for each instance, though it’s **less memory-
 
 If you want **private data shared across all instances**, you can create it in a **closure outside the constructor**, then expose it through prototype methods.
 
-```js
+```
 const User = (function () {
   let secretKey = "XYZ123"; // shared private data
 
@@ -100,7 +100,7 @@ console.log(bob.getSecret()); // "Bob's key is XYZ123"
 **Mixins** allow one object to **copy properties** from another **without changing the prototype chain**.  
 The receiver object simply gets new properties from the supplier through **assignment**, creating a form of **pseudo-inheritance**.
 
-```JS
+```
 function mixin(receiver, supplier) {
   for (let key in supplier) {2
     if (supplier.hasOwnProperty(key)) {
@@ -131,7 +131,7 @@ Notes:
 
 To preserve property descriptors—including getters, setters, and flags like `enumerable`—use a safer mixin based on `Object.getOwnPropertyDescriptors()`:
 
-```js
+```
 function safeMixin(receiver, supplier) {
   Object.defineProperties(receiver, Object.getOwnPropertyDescriptors(supplier));
 }
@@ -155,7 +155,7 @@ This version copies **properties exactly as defined**, keeping accessors and con
 Because constructors in JavaScript are just functions, calling them without `new` changes the meaning of `this`: in non-strict mode it refers to the global object, and in strict mode it throws an error. Many built-in constructors like `Array` and `RegExp` are **scope-safe**, meaning they work correctly whether or not `new` is used.
 You can make your own constructors scope-safe by checking whether they were called with `new` using `this instanceof Constructor`. If not, you can return a new instance manually
 
-```js
+```
 function Person(name) {
   if (this instanceof Person) {
     this.name = name;

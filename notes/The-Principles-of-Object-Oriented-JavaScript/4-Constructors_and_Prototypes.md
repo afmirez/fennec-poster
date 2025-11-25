@@ -30,7 +30,7 @@ A **constructor** is just a regular function meant to be called with the **`new`
 - If you **forget to use `new`**, `this` won’t refer to a new object — it will refer to the **global object**
 - Constructors can also use `Object.defineProperty()` to set up controlled or hidden instance properties.
 
-```js
+```
 function Person(name) {
   this.name = name;
 }
@@ -46,7 +46,7 @@ A **prototype** is like a **blueprint** for objects created by a constructor. Ev
 
 When a new object is created, it links to this prototype, allowing all instances to **access shared properties and methods** without duplicating them.
 
-```js
+```
 function Person(name) {
   this.name = name;
 }
@@ -73,7 +73,7 @@ If it doesn’t exist, it searches up the `[[Prototype]]` chain until it finds i
 Prototypes are perfect for **defining shared methods** for all instances created by a constructor.  
 Since methods usually behave the same way for every object, defining them once on the prototype saves **memory and improves efficiency**.
 
-```js
+```
 function Person(name) {
   this.name = name;
 }
@@ -88,7 +88,7 @@ You can also store other data on the prototype, but be cautious with **reference
 
 Instead of adding methods one by one, many developers replace the entire prototype with an **object literal** for brevity:
 
-```js
+```
 Person.prototype = {
   sayHi() {
     return `Hi, I'm ${this.name}`;
@@ -98,7 +98,7 @@ Person.prototype = {
 
 However, this has a side effect: Overwriting the prototype **removes the original `constructor` property**, making it point to `Object` instead of `Person`. To fix that, you must manually **restore the `constructor`**:
 
-```js
+```
 Person.prototype.constructor = Person;
 ```
 
@@ -106,7 +106,7 @@ Person.prototype.constructor = Person;
 
 All instances created from the same constructor share the **same prototype**, so if you modify that prototype, **all existing instances** immediately gain access to the new properties or methods.
 
-```js
+```
 function Person(name) {
   this.name = name;
 }
@@ -127,7 +127,7 @@ Calling **`Object.seal()`** or **`Object.freeze()`** affects only the **instance
 
 All **built-in objects** in JavaScript — such as `Object`, `Array`, `String`, `Number`, and others — have **constructors** and therefore their own **prototypes**. Because of that, you can technically **modify these prototypes** to add new methods or properties, even to primitive types like strings or numbers wrappers.
 
-```js
+```
 String.prototype.reverse = function () {
   return this.split("").reverse().join("");
 };
