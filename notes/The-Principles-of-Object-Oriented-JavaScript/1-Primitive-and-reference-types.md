@@ -108,12 +108,12 @@ function reflect(value) {
   return value;
 }
 
-console.log(items instanceof Array); // true
-console.log(items instanceof Object); // true
-console.log(object instanceof Object); // true
-console.log(object instanceof Array); // false
-console.log(reflect instanceof Function); // true
-console.log(reflect instanceof Object); //true
+console.log(items instanceof Array);
+console.log(items instanceof Object);
+console.log(object instanceof Object);
+console.log(object instanceof Array);
+console.log(reflect instanceof Function);
+console.log(reflect instanceof Object);
 ```
 
 ###### Identifying Arrays

@@ -9,7 +9,8 @@
   h2,
   h3,
   h4,
-  h5 {
+  h5,
+  h6 {
     font-weight: var(--weight-bold);
     color: var(--text-secondary);
   }
@@ -39,6 +40,11 @@
 
   h5 {
     font-size: var(--font-sm);
+    margin-bottom: 2rem;
+  }
+
+  h6 {
+    font-size: var(--font-sm);
 
     margin-bottom: 2rem;
   }
@@ -67,11 +73,15 @@
   ul li {
     list-style: disc;
     margin-bottom: 0.5rem;
+    font-size: var(--font-md);
+    color: var(--base-text);
   }
 
   ol li {
     list-style: decimal;
     margin-bottom: 0.5rem;
+    font-size: var(--font-md);
+    color: var(--base-text);
   }
 
   /* -------- INLINE CODE -------- */
