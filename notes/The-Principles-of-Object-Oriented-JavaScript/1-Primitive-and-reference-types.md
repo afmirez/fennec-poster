@@ -101,7 +101,7 @@ When working with objects, `typeof` isn’t very helpful because it returns `"ob
 
 `instanceof` is more useful: it checks whether a value was created by a specific constructor. It takes an object and a constructor as parameters, returning `true` if the object is an instance of that type, and `false` otherwise.
 
-```
+```js
 var items = [];
 var object = {};
 function reflect(value) {
