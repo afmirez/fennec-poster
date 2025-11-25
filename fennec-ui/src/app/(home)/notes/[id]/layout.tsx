@@ -4,9 +4,9 @@ import Link from "next/link";
 
 interface NotesLayoutProps {
   children: React.ReactNode;
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default async function NotesLayout({
