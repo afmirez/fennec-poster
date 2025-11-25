@@ -29,6 +29,7 @@ export default async function NotesLayout({
           ))}
         </ul>
       </aside>
+
       <div className={styles.content}>{children}</div>
     </div>
   );

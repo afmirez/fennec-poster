@@ -3,9 +3,7 @@
 import styles from "./styles.module.css";
 import { useTheme } from "@/context/theme-context";
 import { THEME } from "@/types/theme.type";
-
 import { useLoader } from "@/context/loader.context";
-import { useEffect, useState } from "react";
 import Loader from "@/components/Loader/Loader";
 
 import { ICON_KEYS } from "@/types/icon-keys.type";
@@ -23,12 +21,6 @@ export default function MainLayout({
 
   const { isLoading } = useLoader();
 
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   return (
     <>
       {isLoading && <Loader />}
@@ -45,30 +37,26 @@ export default function MainLayout({
               />
               <ul className={styles.headerMenu}>
                 <li>
-                  {mounted && (
-                    <IconButton
-                      iconKey={
-                        theme.theme === THEME.dark
-                          ? ICON_KEYS.moon
-                          : ICON_KEYS.sun
-                      }
-                      onClick={theme.toggleTheme}
-                    />
-                  )}
+                  <IconButton
+                    iconKey={
+                      theme.theme === THEME.dark
+                        ? ICON_KEYS.moon
+                        : ICON_KEYS.sun
+                    }
+                    onClick={theme.toggleTheme}
+                  />
                 </li>
               </ul>
             </header>
             <main className={styles.content}>{children}</main>
             <footer className={styles.footer}>
-              {mounted && (
-                <div>
-                  <span>
-                    Authored by <Link href="https://www.afmirez.dev/">me</Link>.
-                    Data is open — clone it, break it, or improve it. The code
-                    is a bit messy, but it works… mostly.
-                  </span>
-                </div>
-              )}
+              <div>
+                <span>
+                  Authored by <Link href="https://www.afmirez.dev/">me</Link>.
+                  Data is open — clone it, break it, or improve it. The code is
+                  a bit messy, but it works… mostly.
+                </span>
+              </div>
             </footer>
           </div>
         </div>
